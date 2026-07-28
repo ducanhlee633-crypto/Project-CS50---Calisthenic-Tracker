@@ -89,9 +89,13 @@ def view_analytics():
     exercise = input("Exercise: ").strip().lower()
     with open ("database.csv") as file:
         reader = csv.DictReader(file)
+        one_rm = 0
         for row in reader:
-            if exercise in row["name"]:
+            if exercise == row["name"]:
                 one_rm = int(row["weight"])*(1+int(row["reps"])/30)
-    return f"{round(one_rm)} Kg"
+        if one_rm == 0:
+            return "Not found"
+        else:
+            return f"{round(one_rm)} Kg"
 if __name__ == "__main__":
     main()
