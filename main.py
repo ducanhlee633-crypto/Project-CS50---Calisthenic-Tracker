@@ -53,7 +53,7 @@ def dashboard():
     return tabulate(data, headers=["Smart Athlete Performance Engine"], tablefmt="grid")
 def select_function():
     function = int(input("Choose a function from 1-4: "))
-    if function <0 and function > 4:
+    if function < 1 or function > 4:
         raise ValueError ("Error")
     else:
         return function
@@ -80,22 +80,28 @@ def log_workout():
             raise EOFError
 def history_view():
     view = []
-    with open ("database.csv") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            view.append([row["date"],row["name"], row["reps"], row["sets"], f"{row["weight"]} Kg"])
+    try:
+        with open ("database.csv", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                view.append([row["date"],row["name"], row["reps"], row["sets"], f"{row['weight']} Kg"])
+    except FileNotFoundError:
+        return "No workout history found."
     return tabulate(view, headers=["Date", "Name", "Reps", "Sets", "Weight"], tablefmt="grid")
 def view_analytics():
     exercise = input("Exercise: ").strip().lower()
-    with open ("database.csv") as file:
-        reader = csv.DictReader(file)
-        one_rm = 0
-        for row in reader:
-            if exercise == row["name"]:
-                one_rm = int(row["weight"])*(1+int(row["reps"])/30)
-        if one_rm == 0:
-            return "Not found"
-        else:
-            return f"{round(one_rm)} Kg"
+    try:
+        with open ("database.csv", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            one_rm = 0
+            for row in reader:
+                if exercise == row["name"]:
+                    one_rm = int(row["weight"])*(1+int(row["reps"])/30)
+            if one_rm == 0:
+                return "Not found"
+            else:
+                return f"{round(one_rm)} Kg"
+    except FileNotFoundError:
+        return "Not found"
 if __name__ == "__main__":
     main()
