@@ -4,7 +4,7 @@ import csv
 import re
 class Log_workout:
     def __init__ (self, date, name, reps, sets, weight):
-        self.name = name
+        self.name = nam
         self.reps = reps
         self.sets = sets
         self.date = date
@@ -103,5 +103,5 @@ def view_analytics():
                 return f"{round(one_rm)} Kg"
     except FileNotFoundError:
         return "Not found"
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__"
+    main
